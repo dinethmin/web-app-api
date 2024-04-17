@@ -321,7 +321,6 @@ app.post('/AdminLogin', (req, res) => {
 })
 
 /*
-
 app.post('/PostArticles', upload.single('content_img'), (req, res) => {
   const { headline, author, subHeader, content } = req.body;
   const contentImgPath = req.file ? req.file.path : null;
@@ -345,11 +344,10 @@ app.post('/PostArticles', upload.single('content_img'), (req, res) => {
     });
 });
 */
+
 app.post('/PostArticles', upload.single('content_img'), (req, res) => {
-  const { headline, author, subHeader, content } = req.body;
-  const contentImgPath = req.file ? req.file.path : null;
-  // Read the image file as binary data
-  const contentImgData = contentImgPath ? fs.readFileSync(contentImgPath) : null;
+  const { headline, author, subHeader, content, content_img } = req.body;
+  const base64String = content_img.split(';base64,').pop();
   // Insert article data into the database
   db('article')
     .insert({
@@ -357,7 +355,7 @@ app.post('/PostArticles', upload.single('content_img'), (req, res) => {
       author,
       subheader: subHeader,
       articlecontent: content,
-      content_img: contentImgData // Store the binary image data
+      content_img: base64String // Store the binary image data
     })
     .returning('*')
     .then(article => {
@@ -367,7 +365,7 @@ app.post('/PostArticles', upload.single('content_img'), (req, res) => {
       console.error('Error saving article:', err);
       res.status(500).json('Error saving article');
     });
-});
+}); 
 
 
 app.post('/AddLandlord', (req, res) => {
