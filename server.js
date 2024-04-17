@@ -320,31 +320,6 @@ app.post('/AdminLogin', (req, res) => {
     .catch(err => res.status(400).json('wrong credentials'))
 })
 
-/*
-app.post('/PostArticles', upload.single('content_img'), (req, res) => {
-  const { headline, author, subHeader, content } = req.body;
-  const contentImgPath = req.file ? req.file.path : null;
-
-  // Insert article data into the database
-  db('article')
-    .insert({
-      headline: headline,
-      author: author,
-      subheader: subHeader,
-      articlecontent: content,
-      content_img: contentImgPath
-    })
-    .returning('*')
-    .then(article => {
-      res.json(article[0]);
-    })
-    .catch(err => {
-      console.error('Error saving article:', err);
-      res.status(500).json('Error saving article');
-    });
-});
-*/
-
 app.post('/PostArticles', upload.single('content_img'), (req, res) => {
   const { headline, author, subHeader, content, content_img } = req.body;
   const base64String = content_img.split(';base64,').pop();
